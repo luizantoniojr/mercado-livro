@@ -1,0 +1,2 @@
+ALTER TABLE customers
+ADD COLUMN status VARCHAR(10);
