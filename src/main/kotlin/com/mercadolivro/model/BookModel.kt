@@ -1,6 +1,8 @@
 package com.mercadolivro.model
 
 import com.mercadolivro.enums.BookStatus
+import com.mercadolivro.enums.Errors
+import com.mercadolivro.exception.BadRequestException
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -30,7 +32,7 @@ data class BookModel(
     var status: BookStatus? = null
         set(value) {
             if (field == BookStatus.DELETED) {
-                throw Exception("Invalid Operation")
+                throw BadRequestException(Errors.ML_1003.message.format(BookStatus.DELETED), Errors.ML_1003.code)
             }
             field = value
         }

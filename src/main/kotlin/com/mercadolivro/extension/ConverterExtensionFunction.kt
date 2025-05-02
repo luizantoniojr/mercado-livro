@@ -29,7 +29,7 @@ fun PutCustomerRequest.toCustomerModel(previusValue: CustomerModel) =
 fun PostBookRequest.toBookModel(customer: CustomerModel) =
     BookModel(
         name = this.name,
-        price = this.price,
+        price = this.price!!,
         status = BookStatus.ACTIVE,
         customer = customer
     )

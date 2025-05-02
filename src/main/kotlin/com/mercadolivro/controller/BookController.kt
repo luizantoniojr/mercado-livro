@@ -3,10 +3,13 @@ package com.mercadolivro.controller
 import com.mercadolivro.controller.request.PostBookRequest
 import com.mercadolivro.controller.request.PutBookRequest
 import com.mercadolivro.controller.response.BookResponse
+import com.mercadolivro.enums.Errors
+import com.mercadolivro.exception.NotFoundException
 import com.mercadolivro.extension.toBookModel
 import com.mercadolivro.extension.toBookResponse
 import com.mercadolivro.service.BookService
 import com.mercadolivro.service.CustomerService
+import jakarta.validation.Valid
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
@@ -28,10 +31,10 @@ class BookController(val bookService: BookService, val customerService: Customer
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun postBook(@RequestBody book: PostBookRequest) {
-        val customer = customerService.getById(book.customerId)
+    fun postBook(@RequestBody @Valid book: PostBookRequest) {
+        val customer = customerService.getById(book.customerId!!)
         if (customer == null) {
-            throw Exception("Id ${book.customerId} invalid")
+            throw NotFoundException(Errors.ML_2001.code, Errors.ML_2001.message.format(book.customerId))
         }
 
         bookService.create(book.toBookModel(customer))
@@ -59,7 +62,7 @@ class BookController(val bookService: BookService, val customerService: Customer
     fun putBook(@PathVariable id: Int, @RequestBody book: PutBookRequest) {
         var bookSaved = bookService.getById(id)
         if (bookSaved == null) {
-            throw Exception("Id $id not found")
+            throw NotFoundException(Errors.ML_1001.code, Errors.ML_1001.message.format(id))
         }
 
         bookService.update(book.toBookModel(bookSaved))

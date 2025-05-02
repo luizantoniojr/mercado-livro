@@ -3,9 +3,12 @@ package com.mercadolivro.controller
 import com.mercadolivro.controller.request.PostCustomerRequest
 import com.mercadolivro.controller.request.PutCustomerRequest
 import com.mercadolivro.controller.response.CustomerResponse
+import com.mercadolivro.enums.Errors
+import com.mercadolivro.exception.NotFoundException
 import com.mercadolivro.extension.toCustomerModel
 import com.mercadolivro.extension.toCustomerResponse
 import com.mercadolivro.service.CustomerService
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -24,23 +27,23 @@ class CustomerController(val customerService: CustomerService) {
 
     @GetMapping
     fun getCustomers(@RequestParam name: String?): List<CustomerResponse> =
-         customerService.get(name).map { it.toCustomerResponse() }
+        customerService.get(name).map { it.toCustomerResponse() }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun postCustomers(@RequestBody customer: PostCustomerRequest) =
+    fun postCustomers(@RequestBody @Valid customer: PostCustomerRequest) =
         customerService.create(customer.toCustomerModel())
 
     @GetMapping("/{id}")
     fun getCustomer(@PathVariable id: Int): CustomerResponse? =
-         customerService.getById(id)?.toCustomerResponse()
+        customerService.getById(id)?.toCustomerResponse()
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun putCustomer(@PathVariable id: Int, @RequestBody customer: PutCustomerRequest) {
+    fun putCustomer(@PathVariable id: Int, @RequestBody @Valid customer: PutCustomerRequest) {
         var customerSaved = customerService.getById(id)
         if (customerSaved == null) {
-            throw Exception("Id $id not found")
+            throw NotFoundException(Errors.ML_2001.message.format(id), Errors.ML_2001.code)
         }
         customerService.update(customer.toCustomerModel(customerSaved))
     }

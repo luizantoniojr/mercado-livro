@@ -1,6 +1,8 @@
 package com.mercadolivro.service
 
 import com.mercadolivro.enums.BookStatus
+import com.mercadolivro.enums.Errors
+import com.mercadolivro.exception.NotFoundException
 import com.mercadolivro.model.BookModel
 import com.mercadolivro.model.CustomerModel
 import com.mercadolivro.repository.BookRepository
@@ -27,7 +29,7 @@ class BookService(val bookRepository: BookRepository) {
     fun delete(id: Int) {
         var book = getById(id)
         if (book == null) {
-            throw Exception("Id $id not found")
+            throw NotFoundException(Errors.ML_1001.message.format(id), Errors.ML_1001.code)
         }
 
         book.status = BookStatus.DELETED
@@ -36,7 +38,7 @@ class BookService(val bookRepository: BookRepository) {
 
     fun update(book: BookModel) {
         if (!bookRepository.existsById(book.id)) {
-            throw Exception("Id ${book.id} not found")
+            throw NotFoundException(Errors.ML_1002.message.format(book.id), Errors.ML_1002.code)
         }
         bookRepository.save(book)
     }
