@@ -52,37 +52,13 @@ src/main/kotlin/com/mercadolivro/
    ./gradlew bootRun
    ```
 
+4. Acesse a documentação Swagger UI:
+   ```
+   http://localhost:8080/swagger-ui/index.html
+   ```
+
 ## Endpoints
 
 ### Customers
 
 ```
-GET /customers              # Lista todos os clientes
-GET /customers?name=João    # Filtra clientes por nome
-POST /customers            # Cria novo cliente
-GET /customers/{id}        # Busca cliente por ID
-PUT /customers/{id}        # Atualiza dados do cliente
-DELETE /customers/{id}     # Remove cliente
-```
-
-### Exemplo de Payload (Cliente)
-
-```json
-{
-    "name": "Nome do Cliente",
-    "email": "cliente@email.com"
-}
-```
-
-## Configuração do Banco de Dados
-
-O projeto utiliza MySQL como banco de dados. As configurações de conexão podem ser encontradas em `application.properties`:
-
-- URL: jdbc:mysql://localhost:3306/app_db
-- Username: app_user
-- Password: app_pass
-
-## Migrations
-
-O projeto utiliza Flyway para controle de migrations. Os scripts de migração estão localizados em:
-`src/main/resources/db/migrations/` 
