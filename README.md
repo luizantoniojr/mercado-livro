@@ -56,9 +56,3 @@ src/main/kotlin/com/mercadolivro/
    ```
    http://localhost:8080/swagger-ui/index.html
    ```
-
-## Endpoints
-
-### Customers
-
-```
