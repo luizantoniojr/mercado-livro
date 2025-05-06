@@ -27,7 +27,7 @@ class BookService(val bookRepository: BookRepository) {
         bookRepository.findById(id).getOrNull()
 
     fun delete(id: Int) {
-        var book = getById(id)
+        val book = getById(id)
         if (book == null) {
             throw NotFoundException(Errors.ML_1001.message.format(id), Errors.ML_1001.code)
         }
