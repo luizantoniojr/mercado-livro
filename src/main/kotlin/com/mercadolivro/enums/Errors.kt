@@ -7,5 +7,6 @@ enum class Errors(val code: String, val message: String) {
     ML_1003("ML-1003", "Cannot update a book with status {%s}"),
     ML_1004("ML-1004", "Books {%s} not found"),
     ML_2001("ML-2001", "Customer {%s} not found"),
-    ML_2002("ML-2002", "Customer {%s} not exists")
+    ML_2002("ML-2002", "Customer {%s} not exists"),
+    ML_3001("ML-3001", "Cannot purchase books with status different from ACTIVE")
 }

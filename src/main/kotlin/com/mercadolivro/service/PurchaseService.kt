@@ -1,6 +1,9 @@
 package com.mercadolivro.service
 
+import com.mercadolivro.enums.BookStatus
+import com.mercadolivro.enums.Errors
 import com.mercadolivro.events.PurchaseEvent
+import com.mercadolivro.exception.NotFoundException
 import com.mercadolivro.model.PurchaseModel
 import com.mercadolivro.repository.PurchaseRepository
 import org.springframework.context.ApplicationEventPublisher
@@ -13,6 +16,9 @@ class PurchaseService(
 ) {
 
     fun create(purchaseModel: PurchaseModel) {
+        if (purchaseModel.books.any { it.status != BookStatus.ACTIVE }) {
+            throw NotFoundException(Errors.ML_3001.message, Errors.ML_3001.code)
+        }
         purchaseRepository.save(purchaseModel)
         applicationEventPublisher.publishEvent(PurchaseEvent(this, purchaseModel))
     }
