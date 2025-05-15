@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: mercado-livro
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  jackson:
+    default-property-inclusion: non_null
