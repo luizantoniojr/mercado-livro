@@ -29,7 +29,7 @@ class AuthorizationFilter(
             val sub = jwtUtil.getSubjectFromToken(token)
             val user = userDetailsService.loadUserByUsername(sub)
 
-            val authentication = UsernamePasswordAuthenticationToken(user, null, emptyList())
+            val authentication = UsernamePasswordAuthenticationToken(user, null, user.authorities)
             SecurityContextHolder.getContext().authentication = authentication
         }
 

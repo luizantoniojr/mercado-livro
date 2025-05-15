@@ -1,6 +1,7 @@
 package com.mercadolivro.config
 
 import com.mercadolivro.enums.Errors
+import com.mercadolivro.enums.Role
 import com.mercadolivro.exception.NotFoundException
 import com.mercadolivro.repository.CustomerRepository
 import com.mercadolivro.security.AuthenticationFilter
@@ -39,6 +40,10 @@ class SecurityConfig(
         "/login"
     )
 
+    private val ADMIN_MATCHERS = arrayOf(
+        "/admins/**"
+    )
+
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
 
@@ -52,6 +57,7 @@ class SecurityConfig(
                 authz
                     .requestMatchers(*PUBLIC_MATCHERS).permitAll()
                     .requestMatchers(HttpMethod.POST, *PUBLIC_POST_MATCHERS).permitAll()
+                    .requestMatchers(*ADMIN_MATCHERS).hasAuthority(Role.ADMIN.description)
                     .anyRequest().authenticated()
             }
             .csrf { it.disable() }
