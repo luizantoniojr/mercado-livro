@@ -32,7 +32,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 @RestController
 @RequestMapping("books")
 @Tag(name = "Books", description = "Endpoints for Managing Books")
-class BookController(val bookService: BookService, val customerService: CustomerService) {
+class BookController(private val bookService: BookService, private val customerService: CustomerService) {
 
     @Operation(summary = "Create book", description = "Create a new book")
     @ApiResponses(value = [

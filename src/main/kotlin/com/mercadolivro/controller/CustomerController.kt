@@ -28,7 +28,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 @RestController
 @RequestMapping("customers")
 @Tag(name = "Customers", description = "Endpoints for Managing Customers")
-class CustomerController(val customerService: CustomerService) {
+class CustomerController(private val customerService: CustomerService) {
 
     @Operation(summary = "List customers", description = "Get all customers with optional name filter")
     @ApiResponse(responseCode = "200", description = "Success")

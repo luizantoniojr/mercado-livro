@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 import kotlin.jvm.optionals.getOrNull
 
 @Service
-class BookService(val bookRepository: BookRepository) {
+class BookService(private val bookRepository: BookRepository) {
 
     fun create(book: BookModel) =
         bookRepository.save(book)
