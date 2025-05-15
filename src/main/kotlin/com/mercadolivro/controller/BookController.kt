@@ -3,10 +3,12 @@ package com.mercadolivro.controller
 import com.mercadolivro.controller.request.PostBookRequest
 import com.mercadolivro.controller.request.PutBookRequest
 import com.mercadolivro.controller.response.BookResponse
+import com.mercadolivro.controller.response.PageResponse
 import com.mercadolivro.enums.Errors
 import com.mercadolivro.exception.NotFoundException
 import com.mercadolivro.extension.toBookModel
 import com.mercadolivro.extension.toBookResponse
+import com.mercadolivro.extension.toPageResponse
 import com.mercadolivro.service.BookService
 import com.mercadolivro.service.CustomerService
 import io.swagger.v3.oas.annotations.Operation
@@ -14,7 +16,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
@@ -48,14 +49,14 @@ class BookController(private val bookService: BookService, private val customerS
     @Operation(summary = "List books", description = "Get all books with pagination")
     @ApiResponse(responseCode = "200", description = "Success")
     @GetMapping
-    fun getBooks(@PageableDefault(page = 0, size = 10) pageable: Pageable): Page<BookResponse> =
-        bookService.getAll(pageable).map { it.toBookResponse() }
+    fun getBooks(@PageableDefault(page = 0, size = 10) pageable: Pageable): PageResponse<BookResponse> =
+        bookService.getAll(pageable).map { it.toBookResponse() }.toPageResponse()
 
     @Operation(summary = "List active books", description = "Get all active books with pagination")
     @ApiResponse(responseCode = "200", description = "Success")
     @GetMapping("/active")
-    fun getActivesBooks(@PageableDefault(page = 0, size = 10) pageable: Pageable): Page<BookResponse> =
-        bookService.getActives(pageable).map { it.toBookResponse() }
+    fun getActivesBooks(@PageableDefault(page = 0, size = 10) pageable: Pageable): PageResponse<BookResponse> =
+        bookService.getActives(pageable).map { it.toBookResponse() }.toPageResponse()
 
     @Operation(summary = "Find book by ID", description = "Returns a single book")
     @ApiResponses(
