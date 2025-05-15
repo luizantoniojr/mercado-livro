@@ -4,10 +4,7 @@ import com.mercadolivro.enums.Errors
 import com.mercadolivro.enums.Role
 import com.mercadolivro.exception.NotFoundException
 import com.mercadolivro.repository.CustomerRepository
-import com.mercadolivro.security.AuthenticationFilter
-import com.mercadolivro.security.AuthorizationFilter
-import com.mercadolivro.security.JWTUtil
-import com.mercadolivro.security.UserCustomDetails
+import com.mercadolivro.security.*
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -29,7 +26,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 class SecurityConfig(
     private val customerRepository: CustomerRepository,
     private val authenticationConfiguration: AuthenticationConfiguration,
-    private val jwtUtil: JWTUtil
+    private val jwtUtil: JWTUtil,
+    private val authenticationEntryPoint: CustomAuthenticationEntryPoint
 ) {
 
     private val PUBLIC_MATCHERS = arrayOf(
@@ -70,6 +68,9 @@ class SecurityConfig(
             .addFilter(AuthenticationFilter(authenticationManager, jwtUtil))
             .addFilter(AuthorizationFilter(authenticationManager, jwtUtil, userDetailsService(customerRepository)))
             .authenticationManager(authenticationManager)
+            .exceptionHandling { exception ->
+                exception.authenticationEntryPoint(authenticationEntryPoint)
+            }
 
         return http.build()
     }

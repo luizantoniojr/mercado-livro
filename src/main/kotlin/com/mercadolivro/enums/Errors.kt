@@ -5,6 +5,7 @@ enum class Errors(val code: String, val message: String) {
     ML_002("ML-002", "Authentication failed"),
     ML_003("ML-003", "Authorization failed"),
     ML_004("ML-004", "Invalid Token"),
+    ML_005("ML-005", "Access Denied"),
     ML_1001("ML-1001", "Book {%s} not found"),
     ML_1002("ML-1002", "Book {%s} not exists"),
     ML_1003("ML-1003", "Cannot update a book with status {%s}"),

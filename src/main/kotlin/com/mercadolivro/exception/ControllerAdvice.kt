@@ -21,7 +21,7 @@ class ControllerAdvice {
             exception.message,
             exception.errorCode,
             null
-        );
+        )
 
         return ResponseEntity(error, HttpStatus.NOT_FOUND)
     }
@@ -34,7 +34,7 @@ class ControllerAdvice {
             exception.message,
             exception.errorCode,
             null
-        );
+        )
 
         return ResponseEntity(error, HttpStatus.BAD_REQUEST)
     }
@@ -50,8 +50,22 @@ class ControllerAdvice {
             Errors.ML_001.message,
             Errors.ML_001.code,
             exception.bindingResult.fieldErrors.map { FieldErrorResponse(it.defaultMessage ?: "invalid", it.field) }
-        );
+        )
 
         return ResponseEntity(error, HttpStatus.UNPROCESSABLE_ENTITY)
     }
+
+    @ExceptionHandler(AccessDeniedException::class)
+    fun handleException(exception: AccessDeniedException, request: WebRequest): ResponseEntity<ErrorResponse> {
+
+        val error = ErrorResponse(
+            HttpStatus.FORBIDDEN.value(),
+            Errors.ML_005.message,
+            Errors.ML_005.code,
+            null
+        )
+
+        return ResponseEntity(error, HttpStatus.NOT_FOUND)
+    }
+
 }
