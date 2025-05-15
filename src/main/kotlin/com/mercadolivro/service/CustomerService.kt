@@ -6,14 +6,17 @@ import com.mercadolivro.enums.Profile
 import com.mercadolivro.exception.NotFoundException
 import com.mercadolivro.model.CustomerModel
 import com.mercadolivro.repository.CustomerRepository
+import org.springframework.security.crypto.bcrypt.BCrypt
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import kotlin.jvm.optionals.getOrNull
 
 
 @Service
 class CustomerService(
-    val customerRepository: CustomerRepository,
-    val bookService: BookService
+    private val customerRepository: CustomerRepository,
+    private val bookService: BookService,
+    private val bCrypt: BCryptPasswordEncoder
 ) {
 
     fun get(name: String?): List<CustomerModel> {
@@ -27,7 +30,8 @@ class CustomerService(
     fun create(customer: CustomerModel) {
         customerRepository.save(
             customer.copy(
-                role = setOf(Profile.CUSTOMER)
+                role = setOf(Profile.CUSTOMER),
+                password = bCrypt.encode(customer.password)
             )
         )
     }
