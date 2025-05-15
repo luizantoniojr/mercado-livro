@@ -7,4 +7,5 @@ data class CustomerResponse (
     var name: String,
     var email: String,
     var status: CustomerStatus,
+    var roles: Set<String> = setOf()
 )
