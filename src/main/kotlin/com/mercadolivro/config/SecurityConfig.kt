@@ -4,6 +4,7 @@ import com.mercadolivro.enums.Errors
 import com.mercadolivro.exception.NotFoundException
 import com.mercadolivro.repository.CustomerRepository
 import com.mercadolivro.security.AuthenticationFilter
+import com.mercadolivro.security.AuthorizationFilter
 import com.mercadolivro.security.JWTUtil
 import com.mercadolivro.security.UserCustomDetails
 import org.springframework.context.annotation.Bean
@@ -57,6 +58,7 @@ class SecurityConfig(
             .httpBasic { it.disable() }
             .formLogin { it.disable() }
             .addFilter(AuthenticationFilter(authenticationManager, jwtUtil))
+            .addFilter(AuthorizationFilter(authenticationManager, jwtUtil, userDetailsService(customerRepository)))
             .authenticationManager(authenticationManager)
 
         return http.build()

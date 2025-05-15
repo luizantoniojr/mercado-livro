@@ -1,5 +1,7 @@
 package com.mercadolivro.security
 
+import com.mercadolivro.enums.Errors
+import com.mercadolivro.exception.AuthenticationException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
@@ -28,5 +30,28 @@ class JWTUtil {
             .setExpiration(expiryDate)
             .signWith(key, SignatureAlgorithm.HS512)
             .compact()
+    }
+
+    fun isValidToken(token: String): Boolean {
+        return try {
+            val key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(secret))
+            val claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+            claims.body.expiration.after(Date())
+        } catch (e: Exception) {
+            throw AuthenticationException(Errors.ML_003.message, Errors.ML_003.code)
+        }
+    }
+
+    fun getSubjectFromToken(token: String): String {
+        val key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(secret))
+        return Jwts.parserBuilder()
+            .setSigningKey(key)
+            .build()
+            .parseClaimsJws(token)
+            .body
+            .subject
     }
 }
