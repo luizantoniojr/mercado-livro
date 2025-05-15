@@ -9,24 +9,16 @@ import com.mercadolivro.extension.toBookModel
 import com.mercadolivro.extension.toBookResponse
 import com.mercadolivro.service.BookService
 import com.mercadolivro.service.CustomerService
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.web.bind.annotation.RestController
-import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.tags.Tag
-import io.swagger.v3.oas.annotations.responses.ApiResponse
-import io.swagger.v3.oas.annotations.responses.ApiResponses
+import org.springframework.web.bind.annotation.*
 
 
 @RestController
@@ -35,11 +27,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 class BookController(private val bookService: BookService, private val customerService: CustomerService) {
 
     @Operation(summary = "Create book", description = "Create a new book")
-    @ApiResponses(value = [
-        ApiResponse(responseCode = "201", description = "Book created successfully"),
-        ApiResponse(responseCode = "404", description = "Customer not found"),
-        ApiResponse(responseCode = "400", description = "Invalid request data")
-    ])
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "201", description = "Book created successfully"),
+            ApiResponse(responseCode = "404", description = "Customer not found"),
+            ApiResponse(responseCode = "400", description = "Invalid request data")
+        ]
+    )
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun postBook(@RequestBody @Valid book: PostBookRequest) {
@@ -64,30 +58,36 @@ class BookController(private val bookService: BookService, private val customerS
         bookService.getActives(pageable).map { it.toBookResponse() }
 
     @Operation(summary = "Find book by ID", description = "Returns a single book")
-    @ApiResponses(value = [
-        ApiResponse(responseCode = "200", description = "Success"),
-        ApiResponse(responseCode = "404", description = "Book not found")
-    ])
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Success"),
+            ApiResponse(responseCode = "404", description = "Book not found")
+        ]
+    )
     @GetMapping("/{id}")
     fun getBook(@PathVariable id: Int): BookResponse? =
         bookService.getById(id)?.toBookResponse()
 
     @Operation(summary = "Delete book", description = "Delete an existing book by ID")
-    @ApiResponses(value = [
-        ApiResponse(responseCode = "204", description = "Book deleted successfully"),
-        ApiResponse(responseCode = "404", description = "Book not found")
-    ])
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "204", description = "Book deleted successfully"),
+            ApiResponse(responseCode = "404", description = "Book not found")
+        ]
+    )
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteBook(@PathVariable id: Int) =
         bookService.delete(id)
 
     @Operation(summary = "Update book", description = "Update an existing book by ID")
-    @ApiResponses(value = [
-        ApiResponse(responseCode = "204", description = "Book updated successfully"),
-        ApiResponse(responseCode = "404", description = "Book not found"),
-        ApiResponse(responseCode = "400", description = "Invalid request data")
-    ])
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "204", description = "Book updated successfully"),
+            ApiResponse(responseCode = "404", description = "Book not found"),
+            ApiResponse(responseCode = "400", description = "Invalid request data")
+        ]
+    )
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun putBook(@PathVariable id: Int, @RequestBody book: PutBookRequest) {
