@@ -7,6 +7,8 @@ import com.mercadolivro.enums.Errors
 import com.mercadolivro.exception.NotFoundException
 import com.mercadolivro.extension.toCustomerModel
 import com.mercadolivro.extension.toCustomerResponse
+import com.mercadolivro.security.OnlyAdminCanAccess
+import com.mercadolivro.security.UserCanOnlyAccessTheirOwnResource
 import com.mercadolivro.service.CustomerService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -24,6 +26,7 @@ class CustomerController(private val customerService: CustomerService) {
     @Operation(summary = "List customers", description = "Get all customers with optional name filter")
     @ApiResponse(responseCode = "200", description = "Success")
     @GetMapping
+    @OnlyAdminCanAccess
     fun getCustomers(@RequestParam name: String?): List<CustomerResponse> =
         customerService.get(name).map { it.toCustomerResponse() }
 
@@ -47,6 +50,7 @@ class CustomerController(private val customerService: CustomerService) {
         ]
     )
     @GetMapping("/{id}")
+    @UserCanOnlyAccessTheirOwnResource
     fun getCustomer(@PathVariable id: Int): CustomerResponse? =
         customerService.getById(id)?.toCustomerResponse()
 
@@ -59,6 +63,7 @@ class CustomerController(private val customerService: CustomerService) {
         ]
     )
     @PutMapping("/{id}")
+    @UserCanOnlyAccessTheirOwnResource
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun putCustomer(@PathVariable id: Int, @RequestBody @Valid customer: PutCustomerRequest) {
         var customerSaved = customerService.getById(id)
@@ -76,6 +81,7 @@ class CustomerController(private val customerService: CustomerService) {
         ]
     )
     @DeleteMapping("/{id}")
+    @UserCanOnlyAccessTheirOwnResource
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteCustomer(@PathVariable id: Int) =
         customerService.delete(id)

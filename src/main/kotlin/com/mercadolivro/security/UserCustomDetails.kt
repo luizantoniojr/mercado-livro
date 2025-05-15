@@ -9,6 +9,10 @@ import org.springframework.security.core.userdetails.UserDetails
 class UserCustomDetails(
     private val customer: CustomerModel
 ) : UserDetails {
+
+    var id = customer.id
+        private set
+
     override fun getAuthorities(): Collection<GrantedAuthority> =
         customer.roles.map { SimpleGrantedAuthority(it.description) }
 
@@ -18,6 +22,4 @@ class UserCustomDetails(
     override fun isAccountNonLocked() = true
     override fun isCredentialsNonExpired() = true
     override fun isEnabled(): Boolean = customer.status == CustomerStatus.ACTIVE
-    fun getId() = customer.id
-    fun getCustomer() = customer
 }
