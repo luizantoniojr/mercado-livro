@@ -4,6 +4,7 @@ plugins {
     kotlin("plugin.jpa") version "1.9.25"
     id("org.springframework.boot") version "3.2.3"
     id("io.spring.dependency-management") version "1.1.4"
+    jacoco
 }
 
 
@@ -18,6 +19,13 @@ java {
 
 repositories {
 	mavenCentral()
+}
+
+configurations.all {
+    resolutionStrategy {
+        force("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.7.3")
+        force("org.jetbrains:annotations:23.0.0")
+    }
 }
 
 dependencies {
@@ -37,6 +45,9 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
     implementation("org.flywaydb:flyway-core:9.22.3")
     implementation("org.flywaydb:flyway-mysql:9.22.3")
+
+    testImplementation(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.7.3"))
+    testImplementation("io.mockk:mockk:1.13.8")
 }
 
 kotlin {

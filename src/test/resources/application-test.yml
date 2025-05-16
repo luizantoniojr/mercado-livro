@@ -1,0 +1,23 @@
+spring:
+  profiles:
+    active: test
+  application:
+    name: mercado-livro
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  jackson:
+    default-property-inclusion: non_null
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/app_db_test?allowPublicKeyRetrieval=true&useSSL=false
+    username: app_user
+    password: app_pass
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+jwt:
+  secret: mD4tT6+3rebPeHf2neGHT5IR+LnppxBPcGAi9T8RmavB80ObYEFBLXk64zQtUwg6khLb7WHJhWr9FcV4EjYrLQ==
+  expiration: 3600000
