@@ -48,7 +48,7 @@ class CustomerService(
     }
 
     fun delete(id: Int) {
-        var customer = getById(id)
+        val customer = getById(id)
         if (customer == null) {
             throw NotFoundException(Errors.ML_2001.message.format(id), Errors.ML_2001.code)
         }

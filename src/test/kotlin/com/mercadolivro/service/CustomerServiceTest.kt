@@ -8,6 +8,7 @@ import com.mercadolivro.repository.CustomerRepository
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.SpyK
 import io.mockk.junit5.MockKExtension
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -30,6 +31,7 @@ class CustomerServiceTest {
     private lateinit var bCrypt: BCryptPasswordEncoder
 
     @InjectMockKs
+    @SpyK
     private lateinit var customerService: CustomerService
 
     @Test
@@ -136,14 +138,14 @@ class CustomerServiceTest {
         //Assert
         assertEquals("Customer {${fakeCustomer.id}} not exists", error.message)
         verify(exactly = 1) { customerRepository.existsById(fakeCustomer.id) }
-        verify(exactly = 0) { customerRepository.save(fakeCustomer) }
+        verify(exactly = 0) { customerRepository.save(any()) }
     }
 
     @Test
     fun `should delete customer and set status to INACTIVE`() {
         //Arrange
         val fakeCustomer = buildCustomerModel()
-        every { customerRepository.findById(fakeCustomer.id) } returns Optional.of(fakeCustomer)
+        every { customerService.getById(fakeCustomer.id) } returns fakeCustomer
         every { customerRepository.save(fakeCustomer) } returns fakeCustomer
         every { bookService.deleteByCustomer(fakeCustomer) } returns Unit
 
@@ -152,7 +154,7 @@ class CustomerServiceTest {
 
         //Assert
         assertEquals(CustomerStatus.INACTIVE, fakeCustomer.status)
-        verify(exactly = 1) { customerRepository.findById(fakeCustomer.id) }
+        verify(exactly = 1) { customerService.getById(fakeCustomer.id) }
         verify(exactly = 1) { customerRepository.save(fakeCustomer) }
         verify(exactly = 1) { bookService.deleteByCustomer(fakeCustomer) }
     }
@@ -161,14 +163,14 @@ class CustomerServiceTest {
     fun `should throw NotFoundException when customer not found for delete`() {
         //Arrange
         val id = Random().nextInt()
-        every { customerRepository.findById(id) } returns Optional.empty()
+        every { customerService.getById(id) } returns null
 
         //Act
         val error = assertThrows<NotFoundException> { customerService.delete(id) }
 
         //Assert
         assertEquals("Customer {$id} not found", error.message)
-        verify(exactly = 1) { customerRepository.findById(id) }
+        verify(exactly = 1) { customerService.getById(id) }
         verify(exactly = 0) { customerRepository.save(any()) }
     }
 
