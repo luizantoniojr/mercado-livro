@@ -47,7 +47,8 @@ dependencies {
     implementation("org.flywaydb:flyway-mysql:9.22.3")
 
     testImplementation(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.7.3"))
-    testImplementation("io.mockk:mockk:1.13.8")
+    testImplementation("io.mockk:mockk:1.14.2")
+    testImplementation("org.springframework.security:spring-security-test:6.4.5")
 }
 
 kotlin {
