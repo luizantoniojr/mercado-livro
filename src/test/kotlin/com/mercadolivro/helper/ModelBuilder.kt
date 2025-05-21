@@ -1,11 +1,11 @@
 package com.mercadolivro.helper
 
-import com.mercadolivro.enums.BookStatus
-import com.mercadolivro.enums.CustomerStatus
-import com.mercadolivro.enums.Role
-import com.mercadolivro.model.BookModel
-import com.mercadolivro.model.CustomerModel
-import com.mercadolivro.model.PurchaseModel
+import com.mercadolivro.books.BookStatus
+import com.mercadolivro.customer.CustomerStatus
+import com.mercadolivro.shared.enums.Role
+import com.mercadolivro.books.BookModel
+import com.mercadolivro.customer.CustomerModel
+import com.mercadolivro.purchase.PurchaseModel
 import java.math.BigDecimal
 import java.util.Random
 import java.util.UUID
